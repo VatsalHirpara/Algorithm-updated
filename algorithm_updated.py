@@ -70,8 +70,8 @@ class Time_table:
                             if preference in self.blocked_slot:
                                 continue
                             binary = 0
-                            for slot_batch in faculty_lecture_final_map[name]:
-                                if slot_batch==preference:
+                            for slot,batch in faculty_lecture_final_map[name]:
+                                if slot==preference:
                                     binary = 1
                                     break
                             for k in range(1,6):
@@ -118,12 +118,23 @@ class Time_table:
                         continue
                     binary = 0
                     if self.time_table_map[arr][0] in faculty_lecture_final_map:
-                        for slot_batch in faculty_lecture_final_map[self.time_table_map[arr][0]]:
-                            if slot_batch==arr:
+                        for slot,batch in faculty_lecture_final_map[self.time_table_map[arr][0]]:
+                            if slot==arr:
                                 binary = 1
                                 break
-                        if binary==1:
-                            continue
+                    if binary==1:
+                        continue
+                    for k in range(1,6):
+                        temp_preference = (int(arr)-1)/5
+                        temp_preference = temp_preference*5
+                        temp_preference = temp_preference + k
+                        temp_preference = str(temp_preference)
+                        if temp_preference in self.blocked_slot and temp_preference in self.final_time_table:
+                            if self.final_time_table[temp_preference] == self.time_table_map[arr][0]:
+                                binary = 1
+                                break
+                    if binary==1:
+                        continue        
                     self.faculty_lectures[self.time_table_map[arr][0]].append(arr)
                     self.final_time_table[arr] = self.time_table_map[arr][0]
                     self.counter[self.time_table_map[arr][0]] += 1
@@ -154,12 +165,21 @@ class Time_table:
                             continue
                         binary = 0
                         if prof in faculty_lecture_final_map:
-                            for slot_batch in faculty_lecture_final_map[prof]:
-                                if slot_batch==arr:
+                            for slot,batch in faculty_lecture_final_map[prof]:
+                                if slot==arr:
                                     binary = 1
                                     break
-                            if binary==1:
-                                continue
+                        for k in range(1,6):
+                            temp_preference = (int(arr)-1)/5
+                            temp_preference = temp_preference*5
+                            temp_preference = temp_preference + k
+                            temp_preference = str(temp_preference)
+                            if temp_preference in self.blocked_slot and temp_preference in self.final_time_table:
+                                if self.final_time_table[temp_preference] == prof:
+                                    binary = 1
+                                    break
+                        if binary==1:
+                            continue
                         if self.counter[prof] <= minimum:
                             minimum = self.counter[prof]
                             flag = 1
@@ -337,8 +357,8 @@ class Time_table_with_slots:
                             binary = 0
                             for faculty in self.slot_faculty_map[slot]:
                                 if faculty in faculty_lecture_final_map:
-                                    for slot_batch in faculty_lecture_final_map[faculty]:
-                                        if slot_batch==arr:
+                                    for slot,batch in faculty_lecture_final_map[faculty]:
+                                        if slot==preference:
                                             binary = 1
                                             break
                             for k in range(1,6):
@@ -386,8 +406,17 @@ class Time_table_with_slots:
                     binary = 0
                     for faculty in self.slot_faculty_map[self.time_table_map[arr][0][0]]:
                         if faculty in faculty_lecture_final_map:
-                            for slot_batch in faculty_lecture_final_map[faculty]:
-                                if slot_batch==arr:
+                            for slot,batch in faculty_lecture_final_map[faculty]:
+                                if slot==arr:
+                                    binary = 1
+                                    break
+                        for k in range(1,6):
+                            temp_preference = (int(arr)-1)/5
+                            temp_preference = temp_preference*5
+                            temp_preference = temp_preference + k
+                            temp_preference = str(temp_preference)
+                            if temp_preference in self.blocked_slot and temp_preference in self.final_time_table:
+                                if self.final_time_table[temp_preference] == faculty:
                                     binary = 1
                                     break
                     if binary==1:
@@ -425,8 +454,17 @@ class Time_table_with_slots:
                         binary = 0
                         for faculty in self.slot_faculty_map[slot]:
                             if faculty in faculty_lecture_final_map:
-                                for slot_batch in faculty_lecture_final_map[faculty]:
-                                    if slot_batch==arr:
+                                for slot,batch in faculty_lecture_final_map[faculty]:
+                                    if slot==arr:
+                                        binary = 1
+                                        break
+                            for k in range(1,6):
+                                temp_preference = (int(arr)-1)/5
+                                temp_preference = temp_preference*5
+                                temp_preference = temp_preference + k
+                                temp_preference = str(temp_preference)
+                                if temp_preference in self.blocked_slot and temp_preference in self.final_time_table:
+                                    if self.final_time_table[temp_preference] == faculty:
                                         binary = 1
                                         break
                         if binary==1:
